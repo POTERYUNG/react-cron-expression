@@ -1,21 +1,3 @@
-# react-cron-expression
-+ 1.基于react组件的cron表达式生成工具
-+ 2.可展示最近五次运行时间
-
-## Install
-
-```shell
-npm i react-cron-expression --save
-```
-
-## Usage
-
-```javascript
-import CronReactExpression from 'react-cron-expression';
-
-<CronReactExpression onChange={this.onChange} />
-```
-
 ## API
 
 | Prop | Description | Default

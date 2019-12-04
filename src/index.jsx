@@ -1,8 +1,3 @@
-/**
- * 功能：主界面
- * 作者：宋鑫鑫
- * 日期：2019.11.04
- */
 import React, { PureComponent } from "react";
 import PropTypes from 'prop-types'
 import { Tabs, Dropdown, Row, Col, Input, List, Collapse } from "antd";
@@ -20,11 +15,11 @@ const { TabPane } = Tabs;
 const { Panel } = Collapse;
 import "./css/index.less";
 
-const noop = function () { }
+const noop = function () { };
 
 const dateMinute = "YYYY-MM-DD HH:mm";
 
-class Cron extends PureComponent {
+class CronReactExpression extends PureComponent {
     constructor(props) {
         super(props);
         const date = new Date();
@@ -91,10 +86,11 @@ class Cron extends PureComponent {
     }
 
     initValue() {
-        let { value } = this.props
-        value = value.toUpperCase()
+        let { value, activeKey, onlyShowTab } = this.props;
+        value = value.toUpperCase();
         const valuesArray = value.split(" ");
         let newState = { ...this.state };
+        newState.activeKey = onlyShowTab || activeKey || "second";
         newState.second.value = valuesArray[0] || "";
         newState.minute.value = valuesArray[1] || "";
         newState.hour.value = valuesArray[2] || "";
@@ -112,7 +108,7 @@ class Cron extends PureComponent {
     }
 
     componentDidUpdate(props) {
-        const { value } = this.props
+        const { value } = this.props;
         if (props.value !== value && value) {
             this.initValue();
         }
@@ -343,7 +339,7 @@ class Cron extends PureComponent {
     }
 
     triggerChange() {
-        const { onChange, showRunTime } = this.props
+        const { onChange, showRunTime } = this.props;
         const crontab = this.format();
         console.log('crontab', crontab)
         onChange && onChange(crontab);
@@ -383,40 +379,48 @@ class Cron extends PureComponent {
 
     renderOverLay() {
         const { activeKey, week, day } = this.state;
-        const { tabType } = this.props
-        return (
-            <Tabs
-                activeKey={activeKey}
-                onChange={key => {
-                    this.setState({ activeKey: key });
-                }}
-                type={tabType}
-            >
-                <TabPane tab="秒" key="second">
+        const { tabType, onlyShowTab } = this.props;
+        let tabs = [
+            {
+                title: '秒',
+                key: 'second',
+                content: (
                     <Second
                         {...this.state}
                         onChange={state => {
                             this.changeState({ second: state });
                         }}
                     />
-                </TabPane>
-                <TabPane tab="分钟" key="minute">
+                ),
+            },
+            {
+                title: '分钟',
+                key: 'minute',
+                content: (
                     <Minute
                         {...this.state}
                         onChange={state => {
                             this.changeState({ minute: state });
                         }}
                     />
-                </TabPane>
-                <TabPane tab="小时" key="hour">
+                ),
+            },
+            {
+                title: '小时',
+                key: 'hour',
+                content: (
                     <Hour
                         {...this.state}
                         onChange={state => {
                             this.changeState({ hour: state });
                         }}
                     />
-                </TabPane>
-                <TabPane tab="日" key="day">
+                ),
+            },
+            {
+                title: '日',
+                key: 'day',
+                content: (
                     <Day
                         {...this.state}
                         onChange={state => {
@@ -436,16 +440,24 @@ class Cron extends PureComponent {
                             this.changeState({ day: state });
                         }}
                     />
-                </TabPane>
-                <TabPane tab="月" key="month">
+                ),
+            },
+            {
+                title: '月',
+                key: 'month',
+                content: (
                     <Month
                         {...this.state}
                         onChange={state => {
                             this.changeState({ month: state });
                         }}
                     />
-                </TabPane>
-                <TabPane tab="周" key="week">
+                ),
+            },
+            {
+                title: '周',
+                key: 'week',
+                content: (
                     <Week
                         {...this.state}
                         onChange={state => {
@@ -466,16 +478,42 @@ class Cron extends PureComponent {
                             this.changeState({ week: state });
                         }}
                     />
-                </TabPane>
-
-                <TabPane tab="年" key="year">
+                ),
+            },
+            {
+                title: '年',
+                key: 'year',
+                content: (
                     <Year
                         {...this.state}
                         onChange={state => {
                             this.changeState({ year: state });
                         }}
                     />
-                </TabPane>
+                ),
+            },
+        ];
+        if (!!onlyShowTab) {
+            tabs = tabs.filter((item) => item.key === onlyShowTab);
+        }
+
+        return (
+            <Tabs
+                activeKey={activeKey}
+                onChange={key => {
+                    this.setState({ activeKey: key });
+                }}
+                type={tabType}
+            >
+                {
+                    tabs.map((item) => {
+                        return (
+                            <TabPane tab={item.title} key={item.key}>
+                                {item.content}
+                            </TabPane>
+                        );
+                    })
+                }
             </Tabs>
         );
     }
@@ -483,7 +521,7 @@ class Cron extends PureComponent {
     render() {
         const state = JSON.parse(JSON.stringify(this.state));
         const { year, month, week, day, hour, minute, second, runTime } = state;
-        const { showRunTime, showCrontab } = this.props
+        const { showRunTime, showCrontab } = this.props;
         return (
             <div className="cron-editor-react">
                 {this.renderOverLay()}
@@ -595,20 +633,24 @@ class Cron extends PureComponent {
     }
 }
 
-Cron.propTypes = {
+CronReactExpression.propTypes = {
     onChange: PropTypes.func,
     showRunTime: PropTypes.bool,
     value: PropTypes.string,
     tabType: PropTypes.string,
+    activeKey: PropTypes.string,
+    onlyShowTab: PropTypes.string,
     showCrontab: PropTypes.bool
 }
 
-Cron.defaultProps = {
+CronReactExpression.defaultProps = {
     onChange: noop,
     showRunTime: false,
     value: '0 0 0 * * ?',
     tabType: 'line',
+    activeKey: 'second',
+    onlyShowTab: '',
     showCrontab: true
 }
 
-export default Cron;
+export default CronReactExpression;

@@ -1,6 +1,6 @@
 {
-  "name": "cron-editor-react",
-  "version": "2.0.0",
+  "name": "react-cron-expression",
+  "version": "1.0.0",
   "description": "cron react parse",
   "main": "./dist/index",
   "scripts": {
@@ -13,14 +13,14 @@
     "js"
   ],
   "author": {
-    "name": "tulaoda",
-    "email": "coderaxin@163.com"
+    "name": "",
+    "email": ""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tulaoda/cron-editor-react.git"
+    "url": ""
   },
-  "license": "MIT",
+  "license": "",
   "dependencies": {
     "antd": "^3.9.3",
     "cron-parser": "^2.13.0",

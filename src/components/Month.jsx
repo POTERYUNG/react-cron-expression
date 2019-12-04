@@ -1,8 +1,3 @@
-/**
- * 功能：周期-月
- * 作者：宋鑫鑫
- * 日期：2019.11.04
- */
 import React, { PureComponent } from "react";
 import { Radio, InputNumber, Row, Col, List, Checkbox, Select } from "antd";
 const { Group } = Radio;

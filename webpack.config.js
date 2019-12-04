@@ -8,7 +8,7 @@ let webpackConfig = {
     mode: "development",
     devtool: "cheap-module-eval-source-map",
     devServer: {
-        port: 7979,
+        port: 8080,
         open: true,
         host: "0.0.0.0",
         openPage: "./test.html",

@@ -1,5 +1,4 @@
 import React from "react";
 import ReactDom from "react-dom";
-import Cron from "./src/index";
-console.log(Cron);
-ReactDom.render(<Cron />, document.getElementById("app"));
+import CronReactExpression from "./src/index";
+ReactDom.render(<CronReactExpression />, document.getElementById("app"));
