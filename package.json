@@ -1,8 +1,9 @@
 {
-  "name": "react-cron-expression",
-  "version": "1.0.0",
+  "name": "react-cron-expression-bypy",
+  "version": "1.0.1",
   "description": "cron react parse",
   "main": "./dist/index",
+  "private": false,
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack -p --config ./webpack.config.build.js"
@@ -20,7 +21,7 @@
     "type": "git",
     "url": ""
   },
-  "license": "",
+  "license": "ISC",
   "dependencies": {
     "antd": "^3.9.3",
     "cron-parser": "^2.13.0",

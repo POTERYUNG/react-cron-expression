@@ -23,8 +23,9 @@ class CronReactExpression extends PureComponent {
     constructor(props) {
         super(props);
         const date = new Date();
+        const { activeKey, onlyShowTab } = this.props;
         this.state = {
-            activeKey: "second",
+            activeKey: onlyShowTab || activeKey || "second",
             year: {
                 type: "",
                 start: date.getFullYear(),
@@ -86,11 +87,10 @@ class CronReactExpression extends PureComponent {
     }
 
     initValue() {
-        let { value, activeKey, onlyShowTab } = this.props;
+        let { value } = this.props;
         value = value.toUpperCase();
         const valuesArray = value.split(" ");
         let newState = { ...this.state };
-        newState.activeKey = onlyShowTab || activeKey || "second";
         newState.second.value = valuesArray[0] || "";
         newState.minute.value = valuesArray[1] || "";
         newState.hour.value = valuesArray[2] || "";
