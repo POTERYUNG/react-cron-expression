@@ -58,23 +58,24 @@ export default class Hour extends PureComponent {
 
     render() {
         const {
-            hour: { type, start, end, begin, some, beginEvery }
+            hour: { type, start, end, begin, some, beginEvery },
+            objLang = {},
         } = this.props;
         return (
             <div>
                 <Group value={type} onChange={this.changeType}>
                     <List size="small" bordered>
                         <List.Item>
-                            <Radio value="*">每小时</Radio>
+                            <Radio value="*">{objLang.perHour}</Radio>
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
-                            <Radio value="period">周期</Radio>从{" "}
+                            <Radio value="period">{objLang.cycle}</Radio>{objLang.from}{" "}
                             <InputNumber
                                 min={0}
                                 max={22}
                                 defaultValue={0}
                                 style={{ width: 80 }}
-                                placeholder="时"
+                                placeholder={objLang.hour}
                                 size="small"
                                 value={start}
                                 onChange={value => {
@@ -82,13 +83,13 @@ export default class Hour extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            到
+                            {objLang.to}
                             <InputNumber
                                 min={1}
                                 max={23}
                                 defaultValue={1}
                                 style={{ width: 80 }}
-                                placeholder="时"
+                                placeholder={objLang.hour}
                                 value={end}
                                 size="small"
                                 onChange={value => {
@@ -96,16 +97,16 @@ export default class Hour extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            &nbsp;小时&nbsp;
+                            &nbsp;{objLang.hour}&nbsp;
                         </List.Item>
                         <List.Item>
                             <Radio value="beginInterval"></Radio>
-                            从第
+                            {objLang.fromTheFirst}
                             <InputNumber
                                 min={0}
                                 max={23}
                                 defaultValue={0}
-                                placeholder="时"
+                                placeholder={objLang.hour}
                                 size="small"
                                 value={begin}
                                 onChange={value => {
@@ -113,12 +114,12 @@ export default class Hour extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />
-                            时开始， 每
+                            {objLang.hourStartEvery}
                             <InputNumber
                                 min={1}
                                 max={23}
                                 defaultValue={1}
-                                placeholder="小时"
+                                placeholder={objLang.hour}
                                 size="small"
                                 value={beginEvery}
                                 onChange={value => {
@@ -126,21 +127,21 @@ export default class Hour extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />
-                            时执行一次
+                            {objLang.hourExecuteOnce}
                         </List.Item>
                         <List.Item>
-                            <Radio value="some">具体小时数（可多选）</Radio>
+                            <Radio value="some">{objLang.specificHours}</Radio>
                             <Select
                                 style={{ width: "auto" }}
                                 defaultValue={1}
                                 mode="multiple"
-                                placeholder="分钟数"
+                                placeholder={objLang.hours}
                                 size="small"
                                 value={some}
                                 showArrow
                                 onChange={value => {
                                     if (value.length < 1) {
-                                        return message.warn("至少选择一项");
+                                        return message.warn(objLang.selectLeastOne);
                                     }
                                     this.changeParams("some", value);
                                 }}
@@ -148,17 +149,6 @@ export default class Hour extends PureComponent {
                             >
                                 {this.hourOptions}
                             </Select>
-                            {/* <Checkbox.Group
-                                value={some}
-                                onChange={value => {
-                                    if (value.length < 1) {
-                                        return message.warn("至少选择一项");
-                                    }
-                                    this.changeParams("some", value);
-                                }}
-                                options={this.hourOptions}
-                                disabled={type !== "some"}
-                            /> */}
                         </List.Item>
                     </List>
                 </Group>

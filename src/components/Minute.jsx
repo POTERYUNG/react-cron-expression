@@ -58,24 +58,25 @@ export default class Minute extends PureComponent {
 
     render() {
         const {
-            minute: { type, start, end, some, begin, beginEvery }
+            minute: { type, start, end, some, begin, beginEvery },
+            objLang = {},
         } = this.props;
         return (
             <div>
                 <Group value={type} onChange={this.changeType}>
                     <List size="small" bordered>
                         <List.Item>
-                            <Radio value="*">每分钟</Radio>
+                            <Radio value="*">{objLang.perMinute}</Radio>
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
-                            <Radio value="period">周期</Radio>
-                            从&nbsp;
+                            <Radio value="period">{objLang.cycle}</Radio>
+                            {objLang.from}&nbsp;
                             <InputNumber
                                 min={0}
                                 max={58}
                                 defaultValue={0}
                                 style={{ width: 80 }}
-                                placeholder="分"
+                                placeholder={objLang.minute}
                                 size="small"
                                 value={start}
                                 onChange={value => {
@@ -83,13 +84,13 @@ export default class Minute extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            &nbsp;到&nbsp;
+                            &nbsp;{objLang.to}&nbsp;
                             <InputNumber
                                 min={1}
                                 max={59}
                                 defaultValue={1}
                                 style={{ width: 80 }}
-                                placeholder="分"
+                                placeholder={objLang.minute}
                                 value={end}
                                 size="small"
                                 onChange={value => {
@@ -97,16 +98,16 @@ export default class Minute extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            &nbsp;分钟&nbsp;
+                            &nbsp;{objLang.minute}&nbsp;
                         </List.Item>
                         <List.Item>
                             <Radio value="beginInterval"></Radio>
-                            从第&nbsp;
+                            {objLang.fromTheFirst}&nbsp;
                             <InputNumber
                                 min={0}
                                 max={59}
                                 defaultValue={0}
-                                placeholder="分"
+                                placeholder={objLang.minute}
                                 size="small"
                                 value={begin}
                                 onChange={value => {
@@ -114,12 +115,12 @@ export default class Minute extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />
-                            &nbsp;分开始， 每&nbsp;
+                            &nbsp;{objLang.minuteStartEvery}&nbsp;
                             <InputNumber
                                 min={1}
                                 max={59}
                                 defaultValue={1}
-                                placeholder="分"
+                                placeholder={objLang.minute}
                                 size="small"
                                 value={beginEvery}
                                 onChange={value => {
@@ -127,21 +128,21 @@ export default class Minute extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />
-                            &nbsp;分执行一次
+                            &nbsp;{objLang.minuteExecuteOnce}
                         </List.Item>
                         <List.Item>
-                            <Radio value="some">具体分钟数（可多选）</Radio>
+                            <Radio value="some">{objLang.specificMinutes}</Radio>
                             <Select
                                 style={{ width: "auto" }}
                                 defaultValue={1}
                                 mode="multiple"
-                                placeholder="分钟数"
+                                placeholder={objLang.minutes}
                                 size="small"
                                 value={some}
                                 showArrow
                                 onChange={value => {
                                     if (value.length < 1) {
-                                        return message.warn("至少选择一项");
+                                        return message.warn(objLang.selectLeastOne);
                                     }
                                     this.changeParams("some", value);
                                 }}
@@ -149,17 +150,6 @@ export default class Minute extends PureComponent {
                             >
                                 {this.minuteOptions}
                             </Select>
-                            {/* <Checkbox.Group
-                                value={some}
-                                onChange={value => {
-                                    if (value.length < 1) {
-                                        return message.warn("至少选择一项");
-                                    }
-                                    this.changeParams("some", value);
-                                }}
-                                options={this.minuteOptions}
-                                disabled={type !== "some"}
-                            /> */}
                         </List.Item>
                     </List>
                 </Group>

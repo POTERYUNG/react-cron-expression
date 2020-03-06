@@ -1,37 +1,43 @@
 import React, { PureComponent } from "react";
 import { Radio, InputNumber, Row, Col, Select, List, Checkbox, message } from "antd";
+import { zhCN } from "../locales/zh-CN";
 const { Group } = Radio;
+let langObj = zhCN;
 export default class Week extends PureComponent {
-    weekOptions = [
-        {
-            label: "星期一",
-            value: 1
-        },
-        {
-            label: "星期二",
-            value: 2
-        },
-        {
-            label: "星期三",
-            value: 3
-        },
-        {
-            label: "星期四",
-            value: 4
-        },
-        {
-            label: "星期五",
-            value: 5
-        },
-        {
-            label: "星期六",
-            value: 6
-        },
-        {
-            label: "星期日",
-            value: 7
-        }
-    ];
+    constructor(props) {
+        super(props);
+        langObj = props.objLang || zhCN;
+        this.weekOptions = [
+            {
+                label: langObj.monday,
+                value: 1
+            },
+            {
+                label: langObj.tuesday,
+                value: 2
+            },
+            {
+                label: langObj.wednesday,
+                value: 3
+            },
+            {
+                label: langObj.thursday,
+                value: 4
+            },
+            {
+                label:langObj.friday,
+                value: 5
+            },
+            {
+                label: langObj.saturday,
+                value: 6
+            },
+            {
+                label: langObj.sunday,
+                value: 7
+            }
+        ];
+    }
 
     getWeekOptions() {
         return this.weekOptions.map((item, index) => {
@@ -61,7 +67,8 @@ export default class Week extends PureComponent {
 
     render() {
         const {
-            week: { type, start, end, some, begin, beginEvery, last }
+            week: { type, start, end, some, begin, beginEvery, last },
+            objLang = {},
         } = this.props;
         return (
             <div>
@@ -78,17 +85,17 @@ export default class Week extends PureComponent {
                 >
                     <List size="small" bordered>
                         <List.Item>
-                            <Radio value="*">每周</Radio>
+                            <Radio value="*">{objLang.perWeek}</Radio>
                         </List.Item>
                         <List.Item>
-                            <Radio value="?">不指定</Radio>
+                            <Radio value="?">{objLang.notSpecified}</Radio>
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
-                            <Radio value="period">周期</Radio>从{" "}
+                            <Radio value="period">{objLang.cycle}</Radio>{objLang.from}{" "}
                             <Select
                                 style={{ width: 80 }}
                                 defaultValue={1}
-                                placeholder="周"
+                                placeholder={objLang.week}
                                 size="small"
                                 value={start}
                                 onChange={value => {
@@ -98,11 +105,11 @@ export default class Week extends PureComponent {
                             >
                                 {this.getWeekOptions().slice(0, 6)}
                             </Select>{" "}
-                            到{" "}
+                            {objLang.to}{" "}
                             <Select
                                 style={{ width: 80 }}
                                 defaultValue={2}
-                                placeholder="周"
+                                placeholder={objLang.week}
                                 value={end}
                                 size="small"
                                 onChange={value => {
@@ -114,12 +121,12 @@ export default class Week extends PureComponent {
                             </Select>
                         </List.Item>
                         <List.Item>
-                            <Radio value="beginInterval"></Radio>第{" "}
+                            <Radio value="beginInterval"></Radio>{objLang.NO}{" "}
                             <InputNumber
                                 min={1}
                                 max={4}
                                 defaultValue={"1"}
-                                placeholder="周"
+                                placeholder={objLang.week}
                                 size="small"
                                 value={begin}
                                 onChange={value => {
@@ -127,11 +134,11 @@ export default class Week extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />{" "}
-                            周的{" "}
+                            {objLang.weekOf}{" "}
                             <Select
                                 style={{ width: 80 }}
                                 defaultValue={"1"}
-                                placeholder="星期"
+                                placeholder={objLang.week}
                                 value={beginEvery}
                                 size="small"
                                 onChange={value => {
@@ -144,11 +151,11 @@ export default class Week extends PureComponent {
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
                             <Radio value="last"></Radio>
-                            本月最后一个
+                            {objLang.lastTheMonth}
                             <Select
                                 style={{ width: 80 }}
                                 defaultValue={1}
-                                placeholder="星期"
+                                placeholder={objLang.week}
                                 size="small"
                                 value={last}
                                 onChange={value => {
@@ -160,18 +167,18 @@ export default class Week extends PureComponent {
                             </Select>
                         </List.Item>
                         <List.Item>
-                            <Radio value="some">具体星期数（可多选）</Radio>
+                            <Radio value="some">{objLang.specificWeek}</Radio>
                             <Select
                                 style={{ width: "auto" }}
                                 defaultValue="1"
                                 mode="multiple"
-                                placeholder="星期数"
+                                placeholder={objLang.weeks}
                                 size="small"
                                 value={some}
                                 showArrow
                                 onChange={value => {
                                     if (value.length < 1) {
-                                        return message.warn("至少选择一项");
+                                        return message.warn(objLang.selectLeastOne);
                                     }
                                     this.changeParams("some", value);
                                 }}
@@ -179,15 +186,6 @@ export default class Week extends PureComponent {
                             >
                                 {this.getWeekOptions()}
                             </Select>
-                            {/* <Checkbox.Group
-                                value={some}
-                                defaultValue="1"
-                                onChange={value => {
-                                    this.changeParams("some", value);
-                                }}
-                                options={this.weekOptions}
-                                disabled={type !== "some"}
-                            /> */}
                         </List.Item>
                     </List>
                 </Group>

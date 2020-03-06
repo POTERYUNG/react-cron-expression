@@ -11,6 +11,8 @@ import Second from "./components/Second";
 import CronParse from "./parse-lib/index";
 import CronParser from "cron-parser";
 import moment from "moment";
+import { zhCN } from "./locales/zh-CN";
+import { enUS } from "./locales/en-US";
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 import "./css/index.less";
@@ -18,12 +20,13 @@ import "./css/index.less";
 const noop = function () { };
 
 const dateMinute = "YYYY-MM-DD HH:mm";
-
+let objLang = zhCN;
 class CronReactExpression extends PureComponent {
     constructor(props) {
         super(props);
         const date = new Date();
-        const { activeKey, onlyShowTab } = this.props;
+        const { activeKey, onlyShowTab, lang = 'zhCN' } = this.props;
+        objLang = lang === 'zhCN' ? zhCN : enUS;
         this.state = {
             activeKey: onlyShowTab || activeKey || "second",
             year: {
@@ -379,14 +382,15 @@ class CronReactExpression extends PureComponent {
 
     renderOverLay() {
         const { activeKey, week, day } = this.state;
-        const { tabType, onlyShowTab } = this.props;
+        const { tabType, onlyShowTab, lang } = this.props;
         let tabs = [
             {
-                title: '秒',
+                title: objLang.second,
                 key: 'second',
                 content: (
                     <Second
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             this.changeState({ second: state });
                         }}
@@ -394,11 +398,12 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '分钟',
+                title: objLang.minute,
                 key: 'minute',
                 content: (
                     <Minute
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             this.changeState({ minute: state });
                         }}
@@ -406,11 +411,12 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '小时',
+                title: objLang.hour,
                 key: 'hour',
                 content: (
                     <Hour
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             this.changeState({ hour: state });
                         }}
@@ -418,11 +424,12 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '日',
+                title: objLang.day,
                 key: 'day',
                 content: (
                     <Day
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             if (week.type === '?' && state.type === '?') {
                                 const obj = { ...week, type: "*" }
@@ -443,11 +450,13 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '月',
+                title: objLang.month,
                 key: 'month',
                 content: (
                     <Month
                         {...this.state}
+                        objLang={objLang}
+                        lang={lang}
                         onChange={state => {
                             this.changeState({ month: state });
                         }}
@@ -455,11 +464,12 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '周',
+                title: objLang.week,
                 key: 'week',
                 content: (
                     <Week
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             if (day.type === '?' && state.type === '?') {
                                 const obj = { ...week, type: "*" }
@@ -481,11 +491,12 @@ class CronReactExpression extends PureComponent {
                 ),
             },
             {
-                title: '年',
+                title: objLang.year,
                 key: 'year',
                 content: (
                     <Year
                         {...this.state}
+                        objLang={objLang}
                         onChange={state => {
                             this.changeState({ year: state });
                         }}
@@ -530,13 +541,13 @@ class CronReactExpression extends PureComponent {
                         <List bordered style={{ marginTop: 10 }} >
                             <List.Item className="cron-list-type">
                                 <Row type="flex" gutter={5} style={{ width: "100%", textAlign: "center" }}>
-                                    <Col span={3}>秒</Col>
-                                    <Col span={3}>分</Col>
-                                    <Col span={3}>小时</Col>
-                                    <Col span={3}>天</Col>
-                                    <Col span={3}>月</Col>
-                                    <Col span={3}>星期</Col>
-                                    <Col span={3}>年</Col>
+                                    <Col span={3}>{objLang.second}</Col>
+                                    <Col span={3}>{objLang.minute}</Col>
+                                    <Col span={3}>{objLang.hour}</Col>
+                                    <Col span={3}>{objLang.day}</Col>
+                                    <Col span={3}>{objLang.month}</Col>
+                                    <Col span={3}>{objLang.week}</Col>
+                                    <Col span={3}>{objLang.year}</Col>
                                 </Row>
                             </List.Item>
                             <List.Item>
@@ -614,13 +625,13 @@ class CronReactExpression extends PureComponent {
                     showRunTime
                     && (
                         <Collapse>
-                            <Panel header="近5次执行时间" key="1">
+                            <Panel header={objLang.lastFiveTimes} key="1">
                                 <List
                                     bordered
                                     dataSource={runTime}
                                     renderItem={(item, index) => (
                                         <List.Item>
-                                            第{index + 1}执行时间： {item}
+                                            {objLang.NO}{index + 1}{objLang.NO}： {item}
                                         </List.Item>
                                     )}
                                 />
@@ -640,6 +651,7 @@ CronReactExpression.propTypes = {
     tabType: PropTypes.string,
     activeKey: PropTypes.string,
     onlyShowTab: PropTypes.string,
+    lang: PropTypes.string,
     showCrontab: PropTypes.bool
 }
 
@@ -650,6 +662,7 @@ CronReactExpression.defaultProps = {
     tabType: 'line',
     activeKey: 'second',
     onlyShowTab: '',
+    lang: 'zhCN',
     showCrontab: true
 }
 

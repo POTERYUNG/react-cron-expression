@@ -9,6 +9,7 @@
 | activeKey | 定位当前页签，可选 'second' | 'minute' | 'hour' | 'day' | 'month' | 'week' | 'year'
 | onlyShowTab | 仅显示某页签，可选 'second' | 'minute' | 'hour' | 'day' | 'month' | 'week' | 'year'
 | showCrontab | 是否显示crontab | true | 
+| lang | 国际化 | en-US | zh-CN
 
 ## License
 

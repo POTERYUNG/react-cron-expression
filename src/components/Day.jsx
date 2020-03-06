@@ -58,26 +58,27 @@ export default class Day extends PureComponent {
 
     render() {
         const {
-            day: { type, start, end, some, begin, beginEvery, last, closeWorkDay }
+            day: { type, start, end, some, begin, beginEvery, last, closeWorkDay },
+            objLang = {},
         } = this.props;
         return (
             <div>
                 <Group value={type} onChange={this.changeType}>
                     <List size="small" bordered>
                         <List.Item>
-                            <Radio value="*">每日</Radio>
+                            <Radio value="*">{objLang.perDay}</Radio>
                         </List.Item>
                         <List.Item>
-                            <Radio value="?">不指定</Radio>
+                            <Radio value="?">{objLang.notSpecified}</Radio>
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
-                            <Radio value="period">周期</Radio>从{" "}
+                            <Radio value="period">{objLang.cycle}</Radio>{objLang.from}{" "}
                             <InputNumber
                                 min={1}
                                 max={30}
                                 defaultValue={1}
                                 style={{ width: 80 }}
-                                placeholder="日"
+                                placeholder={objLang.day}
                                 size="small"
                                 value={start}
                                 onChange={value => {
@@ -85,13 +86,13 @@ export default class Day extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />{" "}
-                            到{" "}
+                            {objLang.to}{" "}
                             <InputNumber
                                 min={2}
                                 max={31}
                                 defaultValue={2}
                                 style={{ width: 80 }}
-                                placeholder="日"
+                                placeholder={objLang.day}
                                 value={end}
                                 size="small"
                                 onChange={value => {
@@ -99,7 +100,7 @@ export default class Day extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            &nbsp;日&nbsp;
+                            &nbsp;{objLang.day}&nbsp;
                         </List.Item>
                         <List.Item>
                             <Radio value="beginInterval"></Radio>
@@ -107,7 +108,7 @@ export default class Day extends PureComponent {
                             <InputNumber
                                 min={1}
                                 defaultValue={1}
-                                placeholder="日"
+                                placeholder={objLang.day}
                                 size="small"
                                 value={begin}
                                 onChange={value => {
@@ -115,11 +116,11 @@ export default class Day extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />{" "}
-                            日开始， 每{" "}
+                            {objLang.dayStartEvery}{" "}
                             <InputNumber
                                 min={1}
                                 defaultValue={1}
-                                placeholder="天"
+                                placeholder={objLang.day}
                                 size="small"
                                 value={beginEvery}
                                 onChange={value => {
@@ -127,15 +128,15 @@ export default class Day extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />
-                            &nbsp;天执行一次
+                            &nbsp;{objLang.dayExecuteOnce}
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
                             <Radio value="closeWorkDay"></Radio>
-                            每月{" "}
+                            {objLang.perMonth}{" "}
                             <InputNumber
                                 min={1}
                                 defaultValue={1}
-                                placeholder="日"
+                                placeholder={objLang.day}
                                 size="small"
                                 value={closeWorkDay}
                                 onChange={value => {
@@ -143,14 +144,14 @@ export default class Day extends PureComponent {
                                 }}
                                 disabled={type !== "closeWorkDay"}
                             />
-                            &nbsp;日最近的那个工作日
+                            &nbsp;{objLang.nearestWorkingDay}
                         </List.Item>
                         <List.Item style={{ marginBottom: 5 }}>
                             <Radio value="last">
-                                本月最后{" "}
+                                {objLang.thisMonthLast}{" "}
                                 <InputNumber
                                     min={0}
-                                    placeholder="天"
+                                    placeholder={objLang.day}
                                     size="small"
                                     value={last}
                                     onChange={value => {
@@ -159,22 +160,22 @@ export default class Day extends PureComponent {
                                     disabled
                                 // disabled={type !== "last"}
                                 />{" "}
-                                天
+                                {objLang.day}
                             </Radio>
                         </List.Item>
                         <List.Item>
-                            <Radio value="some">具体天数（可多选）</Radio>
+                            <Radio value="some">{objLang.specificDay}</Radio>
                             <Select
                                 style={{ width: "auto" }}
                                 defaultValue={["00"]}
                                 mode="multiple"
-                                placeholder="天数"
+                                placeholder={objLang.days}
                                 size="small"
                                 value={some}
                                 showArrow
                                 onChange={value => {
                                     if (value.length < 1) {
-                                        return message.warn("至少选择一项");
+                                        return message.warn(objLang.selectLeastOne);
                                     }
                                     this.changeParams("some", value);
                                 }}
@@ -182,14 +183,6 @@ export default class Day extends PureComponent {
                             >
                                 {this.dayOptions}
                             </Select>
-                            {/* <Checkbox.Group
-                                value={some}
-                                onChange={value => {
-                                    this.changeParams("some", value);
-                                }}
-                                options={this.dayOptions}
-                                disabled={type !== "some"}
-                            /> */}
                         </List.Item>
                     </List>
                 </Group>

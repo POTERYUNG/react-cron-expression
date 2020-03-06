@@ -32,9 +32,51 @@ export default class Month extends PureComponent {
     // }
 
     formatMonthOptions() {
+        const { objLang = {}, lang } = this.props;
         this.monthOptions = [];
         for (let x = 1; x < 13; x++) {
-            const label = `${x}月`;
+            let label = `${x}${objLang.month}`;
+            if (lang === 'enUS') {
+                switch (x) {
+                    case 1:
+                        label = 'January';
+                        break;
+                    case 2:
+                        label = 'February';
+                        break;
+                    case 3:
+                        label = 'March';
+                        break;
+                    case 4:
+                        label = 'April';
+                        break;
+                    case 5:
+                        label = 'May';
+                        break;
+                    case 6:
+                        label = 'June';
+                        break;
+                    case 7:
+                        label = 'July';
+                        break;
+                    case 8:
+                        label = 'August';
+                        break;
+                    case 9:
+                        label = 'September';
+                        break;
+                    case 10:
+                        label = 'October';
+                        break;
+                    case 11:
+                        label = 'November';
+                        break;
+                    case 12:
+                        label = 'December';
+                        break;
+                }
+            }
+
             const value = `${x}`;
             const ele = (
                 <Select.Option value={value} key={`${label}-${x}`}>
@@ -56,25 +98,26 @@ export default class Month extends PureComponent {
 
     render() {
         const {
-            month: { type, start, end, beginEvery, begin, some }
+            month: { type, start, end, beginEvery, begin, some },
+            objLang = {},
         } = this.props;
         return (
             <div>
                 <Group value={type} onChange={this.changeType}>
                     <List size="small" bordered>
                         <List.Item>
-                            <Radio value="*">每月</Radio>
+                            <Radio value="*">{objLang.perMonth}</Radio>
                         </List.Item>
                         {/* <List.Item>
                             <Radio value="?">不指定</Radio>
                         </List.Item> */}
                         <List.Item style={{ marginBottom: 5 }}>
-                            <Radio value="period">周期</Radio>从{" "}
+                            <Radio value="period">{objLang.cycle}</Radio>{objLang.from}{" "}
                             <InputNumber
                                 min={1}
                                 max={11}
                                 defaultValue={1}
-                                placeholder="月"
+                                placeholder={objLang.month}
                                 size="small"
                                 value={start}
                                 onChange={value => {
@@ -82,12 +125,12 @@ export default class Month extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />{" "}
-                            到{" "}
+                            {objLang.to}{" "}
                             <InputNumber
                                 min={2}
                                 max={12}
                                 defaultValue={2}
-                                placeholder="月"
+                                placeholder={objLang.month}
                                 value={end}
                                 size="small"
                                 onChange={value => {
@@ -95,7 +138,7 @@ export default class Month extends PureComponent {
                                 }}
                                 disabled={type !== "period"}
                             />
-                            &nbsp;月&nbsp;
+                            &nbsp;{objLang.month}&nbsp;
                         </List.Item>
                         <List.Item>
                             <Radio value="beginInterval"></Radio>
@@ -103,7 +146,7 @@ export default class Month extends PureComponent {
                                 min={1}
                                 max={12}
                                 defaultValue={1}
-                                placeholder="天"
+                                placeholder={objLang.day}
                                 size="small"
                                 value={begin}
                                 onChange={value => {
@@ -111,12 +154,12 @@ export default class Month extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />{" "}
-                            日开始， 每{" "}
+                            {objLang.dayStartEvery}{" "}
                             <InputNumber
                                 min={1}
                                 max={12}
                                 defaultValue={1}
-                                placeholder="月"
+                                placeholder={objLang.month}
                                 endYear={beginEvery}
                                 size="small"
                                 onChange={value => {
@@ -124,21 +167,21 @@ export default class Month extends PureComponent {
                                 }}
                                 disabled={type !== "beginInterval"}
                             />{" "}
-                            月执行一次
+                            {objLang.monthExecuteOnce}
                         </List.Item>
                         <List.Item>
-                            <Radio value="some">具体月数（可多选）</Radio>
+                            <Radio value="some">{objLang.specificMonth}</Radio>
                             <Select
                                 style={{ width: "auto" }}
                                 defaultValue={1}
                                 mode="multiple"
-                                placeholder="月数"
+                                placeholder={objLang.months}
                                 size="small"
                                 value={some}
                                 showArrow
                                 onChange={value => {
                                     if (value.length < 1) {
-                                        return message.warn("至少选择一项");
+                                        return message.warn(objLang.selectLeastOne);
                                     }
                                     this.changeParams("some", value);
                                 }}
@@ -146,14 +189,6 @@ export default class Month extends PureComponent {
                             >
                                 {this.monthOptions}
                             </Select>
-                            {/* <Checkbox.Group
-                                value={some}
-                                onChange={value => {
-                                    this.changeParams("some", value);
-                                }}
-                                options={this.eachMonthOptions()}
-                                disabled={type !== "some"}
-                            /> */}
                         </List.Item>
                     </List>
                 </Group>
