@@ -1,6 +1,6 @@
 {
   "name": "react-cron-expression-bypy",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "cron react parse",
   "main": "./dist/index",
   "private": false,
